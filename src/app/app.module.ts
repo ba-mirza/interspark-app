@@ -1,11 +1,13 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
+import { HttpClientModule } from '@angular/common/http';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { JobsPageComponent } from './pages/jobs-page/jobs-page.component';
 import { JobEditPageComponent } from './pages/job-edit-page/job-edit-page.component';
 import { JobCreatePageComponent } from './pages/job-create-page/job-create-page.component';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 @NgModule({
   declarations: [
@@ -14,7 +16,7 @@ import { JobCreatePageComponent } from './pages/job-create-page/job-create-page.
     JobEditPageComponent,
     JobCreatePageComponent,
   ],
-  imports: [BrowserModule, AppRoutingModule],
+  imports: [BrowserModule, AppRoutingModule, HttpClientModule, NgbModule],
   providers: [],
   bootstrap: [AppComponent],
 })
