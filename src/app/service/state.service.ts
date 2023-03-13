@@ -1,8 +1,7 @@
 import { Injectable } from '@angular/core';
 import { DatabaseService } from './database.service';
-import { BehaviorSubject, Observable, catchError, tap, throwError } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { Job, Jobs } from '../interfaces/job-form.interface';
-import { ERROR, OK } from '../utils/errorConstants';
 
 @Injectable({
   providedIn: 'root',
@@ -21,28 +20,18 @@ export class StateService {
   }
 
   public getJobs() {
-    this.db.getJobs<Jobs>().subscribe((jobs: Jobs) => {
-      this.listOfJobs.next(jobs);
-    });
-    return this.listOfJobs.asObservable();
+    return this.db.getJobs<Jobs>();
   }
 
   public get error(): string | null {
     return this.errorCode.getValue();
   }
 
-  public set addToList(job: Jobs) {
-    this.listOfJobs.next(job);
+  public postEditJob(id: number, job: any) {
+    return this.db.editJob(id, job);
   }
 
-  public postJobs(newJob: Job, callBack: (newData: Jobs) => void) {
-    this.db
-      .createNewJob(newJob)
-      .pipe(
-        catchError((err) => {
-          throw new Error(err);
-        })
-      )
-      .subscribe((newData) => callBack(newData));
+  public postJobs(newJob: Job) {
+    return this.db.createNewJob(newJob);
   }
 }

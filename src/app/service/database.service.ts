@@ -11,7 +11,7 @@ export class DatabaseService {
   constructor(private http: HttpClient) {}
 
   public getJobs<T>(id?: number): Observable<T> {
-    if (id !== 0) {
+    if (id) {
       return this.http.get<T>(`${environments.url}jobs/${id}`);
     }
     return this.http.get<T>(`${environments.url}jobs`);
@@ -22,6 +22,6 @@ export class DatabaseService {
   }
 
   public editJob(id: number, editedJob: Job) {
-    return this.http.post(`${environments.url}/${id}`, { body: editedJob });
+    return this.http.put(`${environments.url}jobs/${id}`, editedJob);
   }
 }

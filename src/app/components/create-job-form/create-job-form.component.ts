@@ -18,15 +18,14 @@ import { Job } from 'src/app/interfaces/job-form.interface';
   templateUrl: './create-job-form.component.html',
   styleUrls: ['./create-job-form.component.scss'],
   encapsulation: ViewEncapsulation.Emulated,
-  changeDetection: ChangeDetectionStrategy.Default,
 })
 export class CreateJobFormComponent implements OnInit, OnChanges {
   @Input() jobFields?: Job;
-  @Output() createJobEmit: EventEmitter<Job> = new EventEmitter<Job>();
+  @Input() typeSubmit!: string;
+  @Output() jobEmitter: EventEmitter<Job> = new EventEmitter<Job>();
   public job_form_structure: string[] = [];
 
   public createJobForm: FormGroup = new FormGroup({
-    id: new FormControl(null),
     job_number: new FormControl(null, [Validators.required]),
     job_title: new FormControl(null, [Validators.required]),
     job_start_date: new FormControl(null, [Validators.required]),
@@ -46,14 +45,14 @@ export class CreateJobFormComponent implements OnInit, OnChanges {
     this.patchValueFields(changes);
   }
 
-  public createJob() {
+  public universalEvent() {
     const job = this.createJobForm.getRawValue();
     const { experience_required } = job;
     const newJob = {
       ...job,
       experience_required: coerceBooleanProperty(experience_required),
     };
-    this.createJobEmit.emit(newJob);
+    this.jobEmitter.emit(newJob);
   }
 
   private getControls(): void {
@@ -62,10 +61,11 @@ export class CreateJobFormComponent implements OnInit, OnChanges {
     }
   }
 
-  private patchValueFields(field: SimpleChanges) {
-    const setValuesFields = field['jobFields'].currentValue;
+  private patchValueFields(field?: SimpleChanges): void {
+    const setValuesFields = field!['jobFields'].currentValue;
     if (setValuesFields) {
-      this.createJobForm.setValue(setValuesFields);
+      const { id, ...valuesOfFields } = setValuesFields;
+      this.createJobForm.setValue(valuesOfFields);
     }
   }
 }

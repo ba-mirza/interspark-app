@@ -1,10 +1,4 @@
-import {
-  Component,
-  OnDestroy,
-  OnInit,
-  ViewEncapsulation,
-  ChangeDetectionStrategy,
-} from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
 import { Router } from '@angular/router';
 import { Subject, takeUntil } from 'rxjs';
 import { Jobs } from 'src/app/interfaces/job-form.interface';
@@ -15,7 +9,6 @@ import { StateService } from 'src/app/service/state.service';
   templateUrl: './jobs-page.component.html',
   styleUrls: ['./jobs-page.component.scss'],
   encapsulation: ViewEncapsulation.Emulated,
-  changeDetection: ChangeDetectionStrategy.Default,
 })
 export class JobsPageComponent implements OnInit, OnDestroy {
   public jobs!: any; // Fix it
@@ -28,7 +21,7 @@ export class JobsPageComponent implements OnInit, OnDestroy {
     this.stateService
       .getJobs()
       .pipe(takeUntil(this.destroy$))
-      .subscribe((jobs: Jobs | null) => {
+      .subscribe((jobs: Jobs) => {
         if (!jobs) {
           this.loading = false;
         }

@@ -1,4 +1,8 @@
 <div class="main">
   <h1>Edit Job Page</h1>
-  <app-create-job-form [jobFields]="jobFields"></app-create-job-form>
+  <app-create-job-form
+    [jobFields]="jobFields"
+    [typeSubmit]="'edit'"
+    (jobEmitter)="editJob($event)"
+  ></app-create-job-form>
 </div>

@@ -1,5 +1,15 @@
-import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Params } from '@angular/router';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { ActivatedRoute, Params, Router } from '@angular/router';
+import {
+  EMPTY,
+  Subject,
+  catchError,
+  delayWhen,
+  retryWhen,
+  takeUntil,
+  tap,
+  timer,
+} from 'rxjs';
 import { Job } from 'src/app/interfaces/job-form.interface';
 import { StateService } from 'src/app/service/state.service';
 
@@ -8,13 +18,15 @@ import { StateService } from 'src/app/service/state.service';
   templateUrl: './job-edit-page.component.html',
   styleUrls: ['./job-edit-page.component.scss'],
 })
-export class JobEditPageComponent implements OnInit {
+export class JobEditPageComponent implements OnInit, OnDestroy {
   private id!: number;
   public jobFields!: Job;
+  private destroy$: Subject<undefined> = new Subject();
 
   constructor(
     private activateRoute: ActivatedRoute,
-    private stateService: StateService
+    private stateService: StateService,
+    private route: Router
   ) {}
 
   ngOnInit(): void {
@@ -31,5 +43,19 @@ export class JobEditPageComponent implements OnInit {
       .subscribe((determinatedJob: Job) => {
         this.jobFields = determinatedJob;
       });
+  }
+
+  public editJob(newJob: Job): void {
+    this.stateService
+      .postEditJob(this.id, newJob)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: () => this.route.navigate(['jobs']),
+      });
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next(undefined);
+    this.destroy$.complete();
   }
 }
