@@ -40,6 +40,12 @@ export class JobEditPageComponent implements OnInit, OnDestroy {
   public initData(): void {
     this.stateService
       .getDeterminationJob(this.id)
+      .pipe(
+        takeUntil(this.destroy$),
+        catchError((err) => {
+          throw new Error(err);
+        })
+      )
       .subscribe((determinatedJob: Job) => {
         this.jobFields = determinatedJob;
       });
@@ -48,7 +54,12 @@ export class JobEditPageComponent implements OnInit, OnDestroy {
   public editJob(newJob: Job): void {
     this.stateService
       .postEditJob(this.id, newJob)
-      .pipe(takeUntil(this.destroy$))
+      .pipe(
+        takeUntil(this.destroy$),
+        catchError((err) => {
+          throw new Error(err);
+        })
+      )
       .subscribe({
         next: () => this.route.navigate(['jobs']),
       });

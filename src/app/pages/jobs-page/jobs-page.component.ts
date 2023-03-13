@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
 import { Router } from '@angular/router';
-import { Subject, takeUntil } from 'rxjs';
+import { Subject, catchError, takeUntil } from 'rxjs';
 import { Jobs } from 'src/app/interfaces/job-form.interface';
 import { StateService } from 'src/app/service/state.service';
 
@@ -20,7 +20,12 @@ export class JobsPageComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.stateService
       .getJobs()
-      .pipe(takeUntil(this.destroy$))
+      .pipe(
+        takeUntil(this.destroy$),
+        catchError((err) => {
+          throw new Error(err);
+        })
+      )
       .subscribe((jobs: Jobs) => {
         if (!jobs) {
           this.loading = false;
