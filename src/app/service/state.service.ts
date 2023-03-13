@@ -16,6 +16,10 @@ export class StateService {
 
   constructor(private db: DatabaseService) {}
 
+  public getDeterminationJob(id: number): Observable<Job> {
+    return this.db.getJobs(id);
+  }
+
   public getJobs() {
     this.db.getJobs<Jobs>().subscribe((jobs: Jobs) => {
       this.listOfJobs.next(jobs);

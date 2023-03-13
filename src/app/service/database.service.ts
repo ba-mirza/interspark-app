@@ -11,8 +11,8 @@ export class DatabaseService {
   constructor(private http: HttpClient) {}
 
   public getJobs<T>(id?: number): Observable<T> {
-    if (id === 0) {
-      return this.http.get<T>(`${environments.url}/${id}`);
+    if (id !== 0) {
+      return this.http.get<T>(`${environments.url}jobs/${id}`);
     }
     return this.http.get<T>(`${environments.url}jobs`);
   }
