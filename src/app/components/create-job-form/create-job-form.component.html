@@ -1,1 +1,48 @@
-<p>create-job-form works!</p>
+<form [formGroup]="createJobForm">
+  <ng-container *ngFor="let title_of_input of job_form_structure">
+    <ng-container [ngSwitch]="title_of_input">
+      <div class="custom_input">
+        <label for="typeahead-basic">{{ title_of_input | uppercase }}</label>
+        <ng-container *ngSwitchCase="'job_close_date'">
+          <input
+            id="typeahead-basic"
+            type="date"
+            class="form-control"
+            formControlName="{{ title_of_input }}"
+          />
+        </ng-container>
+        <ng-container *ngSwitchCase="'job_start_date'">
+          <input
+            id="typeahead-basic"
+            type="date"
+            class="form-control"
+            formControlName="{{ title_of_input }}"
+          />
+        </ng-container>
+        <ng-container *ngSwitchCase="'experience_required'">
+          <select
+            formControlName="{{ title_of_input }}"
+            class="form-select"
+            aria-label="Default select example"
+          >
+            <option [value]="true">required</option>
+            <option [value]="false">not required</option>
+          </select>
+        </ng-container>
+        <ng-container *ngSwitchDefault>
+          <input
+            id="typeahead-basic"
+            type="text"
+            class="form-control"
+            formControlName="{{ title_of_input }}"
+          />
+        </ng-container>
+      </div>
+    </ng-container>
+  </ng-container>
+  <div style="margin-top: 1rem">
+    <button (click)="createJob()" class="btn btn-sm2 btn-outline-primary me-2">
+      Create Job
+    </button>
+  </div>
+</form>

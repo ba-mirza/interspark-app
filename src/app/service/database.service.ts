@@ -18,7 +18,7 @@ export class DatabaseService {
   }
 
   public createNewJob(job: Job): Observable<any> {
-    return this.http.post<Job>(environments.url, { body: job });
+    return this.http.post<Job>(`${environments.url}jobs`, job);
   }
 
   public editJob(id: number, editedJob: Job) {

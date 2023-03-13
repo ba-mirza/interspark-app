@@ -1,24 +1,42 @@
 <div class="main">
   <h1>Jobs:</h1>
-  <table class="table table-striped">
-    <thead>
-      <tr>
-        <th scope="col">#</th>
-        <th scope="col">Title</th>
-        <th scope="col">Experience</th>
-        <th scope="col">Job Notes</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let job of jobs; index as i">
-        <th scope="row">{{ i + 1 }}</th>
-        <td>
-          {{ job.job_title }}
-        </td>
-        <td>{{ job.experience_required ? "required" : "not required" }}</td>
-        <td>{{ job.job_notes }}</td>
-      </tr>
-    </tbody>
-  </table>
-  <button class="btn btn-sm btn-outline-primary me-2">Add new job</button>
+  <ng-container *ngIf="loading; else loadingTemplate">
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col">Title</th>
+          <th scope="col">Experience</th>
+          <th scope="col">Job Notes</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr
+          style="cursor: pointer"
+          (click)="redirectTo('detail', job.id)"
+          *ngFor="let job of jobs; index as i"
+        >
+          <th scope="row">
+            {{ i + 1 }}
+          </th>
+          <td>
+            {{ job.job_title }}
+          </td>
+          <td>{{ job.experience_required ? "required" : "not required" }}</td>
+          <td>{{ job.job_notes }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </ng-container>
+  <button (click)="redirectTo()" class="btn btn-sm2 btn-outline-primary me-2">
+    Add new job
+  </button>
 </div>
+
+<ng-template #loadingTemplate>
+  <div class="d-flex justify-content-center">
+    <div class="spinner-border" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+  </div>
+</ng-template>
